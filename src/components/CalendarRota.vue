@@ -1,5 +1,5 @@
 <template>
-    <div class="Calendar">
+    <div class="CalendarRota">
         <v-row class="fill-height">
             <v-col class="pa-0">
             <v-sheet height="66">
