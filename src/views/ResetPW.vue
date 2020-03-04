@@ -10,8 +10,8 @@
             <TransPanel dynamicID="resetPW_Form" class="ma-0">
                 <v-form> 
                     <v-text-field v-model="Email" label="E-mail" required dark></v-text-field>
-                    <v-text-field v-model="newPW" label="Enter new password" required dark></v-text-field>
-                    <v-text-field v-model="confirmNPW" label="Confirm new password" required dark></v-text-field>
+                    <v-text-field v-model="newPW" :type="showNPW ? 'text' : 'Password'" :append-icon="showNPW ? 'visibility' : 'visibility_off'" @click:append="showNPW = !showNPW" label="Enter new password" required dark></v-text-field>
+                    <v-text-field v-model="confirmNPW" :type="showCNPW ? 'text' : 'Password'" :append-icon="showCNPW ? 'visibility' : 'visibility_off'" @click:append="showCNPW = !showCNPW" label="Confirm new password" required dark></v-text-field>
                     <v-container class="pa-0 pt-3" fluid>
                     <v-btn class="btn" to="_blank" outlined dark>Reset password</v-btn>
                     <v-btn class="btn" to="/" outlined dark>Login</v-btn>
@@ -27,6 +27,12 @@ import TransPanel from '@/components/TransPanel.vue'
 export default {
     components: {
         TransPanel
+    },
+    data() {
+        return {
+            showNPW: false,
+            showCNPW: false
+        }
     }
 }
 </script>
