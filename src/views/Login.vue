@@ -11,7 +11,7 @@
           <v-row class="ma-12 md-12" align-center justify-center>
             <TransPanel dynamicID="loginForm" class="ma-0">
               <v-form>
-                <v-text-field v-model="UserName" label="User Name" prepend-icon="person" required dark></v-text-field>
+                <v-text-field v-model="Email" label="Email" prepend-icon="email" required dark></v-text-field>
                 <v-text-field v-model="Password" label="Password" prepend-icon="lock" required dark></v-text-field>
                 <v-btn block color="secondary" dark>Login</v-btn>
                 <v-container class="pa-0 pt-3" fluid>
