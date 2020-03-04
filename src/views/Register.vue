@@ -12,8 +12,8 @@
           <v-text-field v-model="FirstName" label="First name" required dark></v-text-field>
           <v-text-field v-model="LastName" label="Last name" required dark></v-text-field>
           <v-text-field v-model="Email" label="Email" required dark></v-text-field>
-          <v-text-field v-model="Password" label="Password" required dark></v-text-field>
-          <v-text-field v-model="confirmPW" label="Confirm Password" required dark></v-text-field>
+          <v-text-field v-model="Password" label="Password" prepend-icon="lock" :type="showPW ? 'text' : 'Password'" :append-icon="showPW ? 'visibility' : 'visibility_off'" @click:append="showPW = !showPW" required dark></v-text-field>
+          <v-text-field v-model="confirmPW" label="Confirm Password" prepend-icon="lock" :type="showCPW ? 'text' : 'Password'" :append-icon="showCPW ? 'visibility' : 'visibility_off'" @click:append="showCPW = !showCPW" required dark></v-text-field>
           <v-container class="pa-0 pt-3" fluid>
             <v-btn class="btn" to="/" outlined dark>Login</v-btn>
             <v-btn class="btn" to="/" outlined dark>Register</v-btn>
@@ -29,6 +29,12 @@ import TransPanel from '@/components/TransPanel.vue'
 export default {
   components: {
     TransPanel
+  },
+  data() {
+    return {
+      showPW: false,
+      showCPW: false
+    };
   }
 }
 </script>
