@@ -1,6 +1,6 @@
 <template>
     <div class="Dashboard">
-        <ProfileNavBar />
+        <appNavPBar />
         <v-layout align-center justify-center class="ma-8 text-center">
             <v-row class="ma-0 ml-8 md-12">
                 <TransPanel dynamicID="assignedWorship">
@@ -59,12 +59,12 @@
 </template>
 
 <script>
-import ProfileNavBar from '@/components/ProfileNavBar.vue'
+import appNavPBar from '@/components/appNavPBar.vue'
 import TransPanel from '@/components/TransPanel.vue'
 
 export default {
     components: {
-        ProfileNavBar,
+        appNavPBar,
         TransPanel
     }
 }

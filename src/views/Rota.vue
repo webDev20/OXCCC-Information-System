@@ -1,16 +1,16 @@
 <template>
     <div class="Rota">
-        <ProfileNavBar />
+        <appNavPBar />
         <CalendarRota />
     </div>
 </template>
 
 <script>
-import ProfileNavBar from '@/components/ProfileNavBar.vue'
+import appNavPBar from '@/components/appNavPBar.vue'
 import CalendarRota from '@/components/CalendarRota.vue'
   export default {
       components: {
-          ProfileNavBar,
+          appNavPBar,
           CalendarRota
       }
   }
