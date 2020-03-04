@@ -12,7 +12,7 @@
             <TransPanel dynamicID="loginForm" class="ma-0">
               <v-form>
                 <v-text-field v-model="Email" label="Email" prepend-icon="email" required dark></v-text-field>
-                <v-text-field v-model="Password" label="Password" prepend-icon="lock" required dark></v-text-field>
+                <v-text-field v-model="Password" label="Password" prepend-icon="lock" :type="showPW ? 'text' : 'Password'" :append-icon="showPW ? 'visibility' : 'visibility_off'" @click:append="showPW = !showPW" required dark></v-text-field>
                 <v-btn block color="secondary" dark>Login</v-btn>
                 <v-container class="pa-0 pt-3" fluid>
                   <v-btn class="btn" to="/Register" outlined dark>Register</v-btn>
@@ -36,6 +36,11 @@ export default {
   components: {
     DailyVerse,
     TransPanel
+  },
+  data() {
+    return {
+      showPW: false
+    };
   }
 }
 </script>
