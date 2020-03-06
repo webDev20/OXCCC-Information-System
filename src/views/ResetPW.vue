@@ -25,8 +25,9 @@ export default {
     components: {
         TransPanel
     },
-    data() {
+    data: function() {
         return {
+            Email: "",
             showNPW: false,
             showCNPW: false
         }
