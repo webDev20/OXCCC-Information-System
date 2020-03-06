@@ -22,6 +22,10 @@ firebase.initializeApp(configOptions);
 
 export const db = firebase.firestore();
 
+firebase.auth().onAuthStateChanged(user => {
+  store.dispatch("fetchUser", user);
+});
+
 new Vue({
   router,
   store,
