@@ -14,7 +14,7 @@
                 <v-text-field v-model="Email" label="Email" prepend-icon="email" required dark></v-text-field>
                 <v-text-field v-model="Password" label="Password" prepend-icon="lock" :type="showPW ? 'text' : 'Password'" :append-icon="showPW ? 'visibility' : 'visibility_off'" @click:append="showPW = !showPW" required dark></v-text-field>
                 <v-btn @click.prevent="userLogin" block color="secondary" dark>Login</v-btn>
-                <v-container class="pa-0 pt-3" fluid>
+                <v-container class="pa-0 pt-3 text-center" fluid>
                   <v-btn class="btn" to="/Register" outlined dark>Register</v-btn>
                   <v-btn class="btn" to="/ResetPW" outlined dark>Reset Password</v-btn>
                 </v-container>
