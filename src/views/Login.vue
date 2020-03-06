@@ -13,7 +13,7 @@
               <v-form>
                 <v-text-field v-model="Email" label="Email" prepend-icon="email" required dark></v-text-field>
                 <v-text-field v-model="Password" label="Password" prepend-icon="lock" :type="showPW ? 'text' : 'Password'" :append-icon="showPW ? 'visibility' : 'visibility_off'" @click:append="showPW = !showPW" required dark></v-text-field>
-                <v-btn block color="secondary" dark>Login</v-btn>
+                <v-btn @click.prevent="userLogin" block color="secondary" dark>Login</v-btn>
                 <v-container class="pa-0 pt-3" fluid>
                   <v-btn class="btn" to="/Register" outlined dark>Register</v-btn>
                   <v-btn class="btn" to="/ResetPW" outlined dark>Reset Password</v-btn>
@@ -30,17 +30,38 @@
 // @ is an alias to /src
 import DailyVerse from '@/components/DailyVerse.vue'
 import TransPanel from '@/components/TransPanel.vue'
+import firebase from "firebase";
 
 export default {
-  name: 'Login',
   components: {
     DailyVerse,
     TransPanel
   },
-  data() {
+  data: function() {
     return {
-      showPW: false
-    };
+      Email: "",
+      Password: "",
+      showPW: false,
+      error: null
+    }
+  },
+  methods: {
+    userLogin() {
+      firebase.auth()
+      .signInWithEmailAndPassword(this.Email, this.Password)
+      .then(data => {
+        console.info("Logged in successful");
+        console.info("Username: ", data.user.displayName);
+        console.info(data.user.toJSON());
+      })
+      .then(() => {
+        this.$router.replace('Dashboard');
+      })
+      .catch(err => {
+        this.error = err.message;
+        console.error(this.error);
+      });
+    }
   }
 }
 </script>
