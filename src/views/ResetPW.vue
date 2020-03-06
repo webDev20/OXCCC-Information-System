@@ -10,7 +10,7 @@
             <TransPanel dynamicID="resetPW_Form" class="ma-0">
                 <v-form> 
                     <v-text-field v-model="Email" label="E-mail" required dark></v-text-field>
-                    <v-btn class="my-3" to="_blank" block dark>Reset password</v-btn>
+                    <v-btn class="my-3" @click.prevent="sendResetPWEmail" block dark>Reset password</v-btn>
                     <v-btn to="/Login" block dark>Return to login page</v-btn>
                 </v-form>
             </TransPanel>
