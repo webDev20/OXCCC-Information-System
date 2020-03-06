@@ -4,18 +4,14 @@
             OXCCC Information System
         </h1>
         <h2 class="text-center font-weight-bold ma-12 mb-12">
-        Reset Password
+        Enter E-mail for password reset E-mail
         </h2>
         <v-layout align-center justify-center>
             <TransPanel dynamicID="resetPW_Form" class="ma-0">
                 <v-form> 
                     <v-text-field v-model="Email" label="E-mail" required dark></v-text-field>
-                    <v-text-field v-model="newPW" :type="showNPW ? 'text' : 'Password'" :append-icon="showNPW ? 'visibility' : 'visibility_off'" @click:append="showNPW = !showNPW" label="Enter new password" required dark></v-text-field>
-                    <v-text-field v-model="confirmNPW" :type="showCNPW ? 'text' : 'Password'" :append-icon="showCNPW ? 'visibility' : 'visibility_off'" @click:append="showCNPW = !showCNPW" label="Confirm new password" required dark></v-text-field>
-                    <v-container class="pa-0 pt-3" fluid>
-                    <v-btn class="btn" to="_blank" outlined dark>Reset password</v-btn>
-                    <v-btn class="btn" to="/" outlined dark>Login</v-btn>
-                    </v-container>
+                    <v-btn class="my-3" @click.prevent="sendResetPWEmail" block dark>Reset password</v-btn>
+                    <v-btn to="/Login" block dark>Return to login page</v-btn>
                 </v-form>
             </TransPanel>
         </v-layout>
@@ -24,14 +20,31 @@
 
 <script>
 import TransPanel from '@/components/TransPanel.vue'
+import firebase from "firebase";
+
 export default {
     components: {
         TransPanel
     },
-    data() {
+    data: function() {
         return {
+            Email: "",
             showNPW: false,
-            showCNPW: false
+            showCNPW: false,
+            error: null
+        }
+    },
+    methods: {
+        sendResetPWEmail() {
+            firebase.auth()
+            .sendPasswordResetEmail(this.Email)
+            .then(() => {
+                console.info("Email is sent");
+            })
+            .catch(err => {
+                this.error = err.message
+                console.error(this.error);
+            });
         }
     }
 }
