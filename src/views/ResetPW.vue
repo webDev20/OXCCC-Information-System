@@ -11,7 +11,7 @@
                 <v-form> 
                     <v-text-field v-model="Email" label="E-mail" required dark></v-text-field>
                     <v-btn class="my-3" to="_blank" block dark>Reset password</v-btn>
-                    <v-btn to="/" block dark>Return to login page</v-btn>
+                    <v-btn to="/Login" block dark>Return to login page</v-btn>
                 </v-form>
             </TransPanel>
         </v-layout>
@@ -20,6 +20,7 @@
 
 <script>
 import TransPanel from '@/components/TransPanel.vue'
+
 export default {
     components: {
         TransPanel
