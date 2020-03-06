@@ -4,7 +4,7 @@
             OXCCC Information System
         </h1>
         <h2 class="text-center font-weight-bold ma-12 mb-12">
-        Reset Password
+        Enter E-mail for password reset E-mail
         </h2>
         <v-layout align-center justify-center>
             <TransPanel dynamicID="resetPW_Form" class="ma-0">
