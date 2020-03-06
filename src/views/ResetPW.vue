@@ -20,6 +20,7 @@
 
 <script>
 import TransPanel from '@/components/TransPanel.vue'
+import firebase from "firebase";
 
 export default {
     components: {
@@ -29,7 +30,21 @@ export default {
         return {
             Email: "",
             showNPW: false,
-            showCNPW: false
+            showCNPW: false,
+            error: null
+        }
+    },
+    methods: {
+        sendResetPWEmail() {
+            firebase.auth()
+            .sendPasswordResetEmail(this.Email)
+            .then(() => {
+                console.info("Email is sent");
+            })
+            .catch(err => {
+                this.error = err.message
+                console.error(this.error);
+            })
         }
     }
 }
