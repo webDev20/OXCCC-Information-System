@@ -12,10 +12,8 @@
                     <v-text-field v-model="Email" label="E-mail" required dark></v-text-field>
                     <v-text-field v-model="newPW" :type="showNPW ? 'text' : 'Password'" :append-icon="showNPW ? 'visibility' : 'visibility_off'" @click:append="showNPW = !showNPW" label="Enter new password" required dark></v-text-field>
                     <v-text-field v-model="confirmNPW" :type="showCNPW ? 'text' : 'Password'" :append-icon="showCNPW ? 'visibility' : 'visibility_off'" @click:append="showCNPW = !showCNPW" label="Confirm new password" required dark></v-text-field>
-                    <v-container class="pa-0 pt-3" fluid>
-                    <v-btn class="btn" to="_blank" outlined dark>Reset password</v-btn>
-                    <v-btn class="btn" to="/" outlined dark>Login</v-btn>
-                    </v-container>
+                    <v-btn class="my-3" to="_blank" block dark>Reset password</v-btn>
+                    <v-btn to="/" block dark>Return to login page</v-btn>
                 </v-form>
             </TransPanel>
         </v-layout>
