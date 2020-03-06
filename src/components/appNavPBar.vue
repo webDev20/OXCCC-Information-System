@@ -12,15 +12,15 @@
         <template v-slot:activator="{ on }">
           <v-icon v-on="on">expand_more</v-icon>
           <v-icon>person</v-icon>
-          <v-toolbar-title v-on="on">User name{{Username}}</v-toolbar-title>
+          <v-toolbar-title v-on="on">{{user.data.displayName}}</v-toolbar-title>
         </template>
         <v-list flat>
           <v-list-item-group color="indigo">
             <v-list-item>
               <v-list-item-title class="pDown">Profile</v-list-item-title>
             </v-list-item>
-            <v-list-item to="/">
-              <v-list-item-title class="pDown">Logout</v-list-item-title>
+            <v-list-item>
+              <v-list-item-title @click.prevent="signOut" class="pDown">Logout</v-list-item-title>
             </v-list-item>
           </v-list-item-group>
         </v-list>
@@ -43,6 +43,30 @@
     </v-app-bar>
     </div>
 </template>
+
+<script>
+import firebase from "firebase";
+import { mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapGetters({
+// map `this.user` to `this.$store.getters.user`
+      user: "user"
+    })
+  },
+  methods: {
+    signOut() {
+      firebase.auth()
+      .signOut()
+      .then(() => {
+        this.$router.replace('Login');
+        console.log("Successfully logged out");
+      })
+    }
+  }
+}
+</script>
 
 <style lang="scss">
   .pDown:hover{
