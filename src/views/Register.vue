@@ -15,8 +15,8 @@
           <v-text-field v-model="Password" label="Password" :type="showPW ? 'text' : 'Password'" :append-icon="showPW ? 'visibility' : 'visibility_off'" @click:append="showPW = !showPW" required dark></v-text-field>
           <v-text-field v-model="confirmPW" label="Confirm Password" :type="showCPW ? 'text' : 'Password'" :append-icon="showCPW ? 'visibility' : 'visibility_off'" @click:append="showCPW = !showCPW" required dark></v-text-field>
           <v-container class="pa-0 pt-3" fluid>
-            <v-btn class="btn" to="/" outlined dark>Login</v-btn>
-            <v-btn class="btn" to="/" outlined dark>Register</v-btn>
+            <v-btn class="btn" to="/Login" outlined dark>Login</v-btn>
+            <v-btn class="btn" @click.prevent="registerUser" outlined dark>Register</v-btn>
           </v-container>
         </v-form>
       </TransPanel>
@@ -26,15 +26,44 @@
 
 <script>
 import TransPanel from '@/components/TransPanel.vue'
+import firebase from "firebase";
+
 export default {
   components: {
     TransPanel
   },
-  data() {
+  data: function() {
     return {
+      FirstName: "",
+      LastName: "",
+      Email: "",
+      Password: "",
+      confirmPW: "",
       showPW: false,
-      showCPW: false
-    };
+      showCPW: false,
+      error: null
+    }
+  },
+  methods: {
+    registerUser() {
+      firebase.auth()
+      .createUserWithEmailAndPassword(this.Email, this.confirmPW)
+      .then(data => {
+          data.user
+            .updateProfile({
+              displayName: this.FirstName + " " + this.LastName
+            })
+            .then(() => {
+              console.log("New user registered")
+              console.info(data.user.displayName)
+              console.info(data.user.toJSON())
+            });
+        })
+        .catch(err => {
+          this.error = err.message;
+          console.error(this.error)
+        });
+    }
   }
 }
 </script>
