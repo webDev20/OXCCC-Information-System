@@ -26,8 +26,8 @@ firebase.auth().onAuthStateChanged(user => {
   store.dispatch("fetchUser", user);
 });
 
+//handle page reloads
 let app;
-
 firebase.auth().onAuthStateChanged(user => {
   console.info("Vue app: ", user);
   if(!app) {
