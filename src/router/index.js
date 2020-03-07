@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
+import firebase from "firebase";
 
 Vue.use(VueRouter)
 
@@ -26,12 +27,18 @@ const routes = [
   {
     path: '/Dashboard',
     name: 'Dashboard',
-    component: () => import('../views/Dashboard.vue')
+    component: () => import('../views/Dashboard.vue'),
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/Rota',
     name: 'Rota',
-    component: () => import('../views/Rota.vue')
+    component: () => import('../views/Rota.vue'),
+    meta: {
+      requiresAuth: true
+    }
   }
 ]
 
@@ -40,5 +47,19 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(route => route.meta.requiresAuth)) {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        next();
+      } else {
+        next('/Login');
+      }
+    });
+  }
+  next();
+});
+
 
 export default router
