@@ -30,7 +30,7 @@ firebase.auth().onAuthStateChanged(user => {
 let app;
 firebase.auth().onAuthStateChanged(user => {
   console.info("Vue app: ", user);
-  if(!app) {
+  if  (!app) {
     new Vue({
       router,
       store,
