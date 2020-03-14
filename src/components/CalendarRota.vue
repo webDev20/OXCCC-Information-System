@@ -44,13 +44,14 @@
                 </v-menu>
                 </v-toolbar>
             </v-sheet>
-            <v-sheet minHeight="700" class="ml-3">
+            <v-sheet minHeight="700" height="700" class="ml-3">
                 <v-calendar
                 ref="calendar"
                 v-model="focus"
                 color="primary"
                 :events="events"
                 :event-color="getEventColor"
+                :event-margin-bottom="3"
                 :now="today"
                 :type="type"
                 @click:event="showEvent"
@@ -122,8 +123,11 @@ export default {
       selectedElement: null,
       selectedOpen: false,
       events: [],
-      colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-      names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
+      colors: 'blue',
+      dialog: false,
+      eventTitle: null,
+      eventDetails: null,
+      readonly: null
     }),
     computed: {
       title () {
@@ -197,39 +201,13 @@ export default {
         nativeEvent.stopPropagation()
       },
       updateRange ({ start, end }) {
-        const events = []
-
-        const min = new Date(`${start.date}T00:00:00`)
-        const max = new Date(`${end.date}T23:59:59`)
-        const days = (max.getTime() - min.getTime()) / 86400000
-        const eventCount = this.rnd(days, days + 20)
-
-        for (let i = 0; i < eventCount; i++) {
-          const allDay = this.rnd(0, 3) === 0
-          const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-          const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-          const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-          const second = new Date(first.getTime() + secondTimestamp)
-
-          events.push({
-            name: this.names[this.rnd(0, this.names.length - 1)],
-            start: this.formatDate(first, !allDay),
-            end: this.formatDate(second, !allDay),
-            color: this.colors[this.rnd(0, this.colors.length - 1)],
-          })
-        }
-
         this.start = start
         this.end = end
-        this.events = events
       },
       nth (d) {
         return d > 3 && d < 21
           ? 'th'
           : ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][d % 10]
-      },
-      rnd (a, b) {
-        return Math.floor((b - a + 1) * Math.random()) + a
       },
       formatDate (a, withTime) {
         return withTime
