@@ -74,7 +74,7 @@ export default {
     html {
         width: 100%;
         height: 100%;
-        background: url("../assets/DashBackground.png");
+        background: url("../assets/SystemBackground.png");
         background-size: 100%;
         overflow: hidden;
     }
