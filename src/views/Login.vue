@@ -55,11 +55,11 @@ export default {
         console.info(data.user.toJSON());
       })
       .then(() => {
-        this.$router.replace('Dashboard');
+        setTimeout(() => this.$router.replace('Dashboard'), 250);
       })
       .catch(err => {
         this.error = err.message;
-        console.error(this.error);
+        console.error(this.error);this
       });
     }
   }
