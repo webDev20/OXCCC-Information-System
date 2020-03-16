@@ -15,6 +15,10 @@
                 </v-btn>
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-spacer></v-spacer>
+                <v-btn color="primary" dark @click.stop="dialog = true">
+                  New Event
+                </v-btn>
+                <v-spacer></v-spacer>
                 <v-menu bottom right>
                     <template v-slot:activator="{ on }">
                     <v-btn
@@ -107,6 +111,7 @@
 </template>
 
 <script>
+import { db } from '@/main';
 export default {
     data: () => ({
       focus: '',
@@ -125,8 +130,8 @@ export default {
       events: [],
       colors: 'blue',
       dialog: false,
-      eventTitle: null,
-      eventDetails: null,
+      name: null,
+      detail: null,
       readonly: null
     }),
     computed: {
@@ -165,9 +170,19 @@ export default {
       },
     },
     mounted () {
-      this.$refs.calendar.checkChange()
+      this.getEvents();
     },
     methods: {
+      async getEvents () {
+      let snapshot = await db.collection('rota').get()
+      const events = []
+      snapshot.forEach(doc => {
+        let appData = doc.data()
+        appData.id = doc.id
+        events.push(appData)
+      });
+      this.events = events
+    },
       viewDay ({ date }) {
         this.focus = date
         this.type = 'day'
