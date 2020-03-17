@@ -178,7 +178,7 @@
                 >
                 <v-card
                     color="grey lighten-4"
-                    min-width="350px"
+                    min-width="725px"
                     flat
                 >
                     <v-toolbar
@@ -190,9 +190,91 @@
                     </v-btn>
                     <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                     </v-toolbar>
-                    <v-card-text>
-                    <span v-html="selectedEvent.details"></span>
-                    </v-card-text>
+                    <v-container fluid>
+                <v-layout>
+                  <v-row class="mr-5 md-12" align-center justify-center>
+                    <v-container>
+                      <v-form @submit.prevent="addEvent">
+                        <v-text-field
+                        readonly
+                        disabled 
+                        dense
+                        outlined 
+                        v-model="selectedEvent.name" 
+                        type="text" 
+                        label="Sermon title (required)"></v-text-field>
+                        <v-text-field
+                        readonly
+                        disabled 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.scriptures" 
+                        type="text" 
+                        label="Scriptures (required)"></v-text-field>
+                        <v-textarea 
+                        readonly
+                        disabled
+                        dense 
+                        outlined 
+                        auto-grow 
+                        label="Service details" v-model="selectedEvent.details"></v-textarea>
+                        <v-text-field
+                        readonly
+                        disabled 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.start" 
+                        type="date" 
+                        label="Event start date"></v-text-field>
+                        <v-text-field
+                        readonly
+                        disabled 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.end" 
+                        type="date" 
+                        label="Event end date"></v-text-field>
+                        <v-text-field
+                        readonly
+                        disabled 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.worshipDetails" 
+                        type="text" 
+                        label="Worship details"></v-text-field>
+                      </v-form>
+                    </v-container>
+                  </v-row>
+                  <v-row class="mr-1 md-5" align-center justify-center>
+                    <v-container id="songList">
+                    <v-list dense>
+                      <p class="text-center">Song Flow</p>
+                      <v-list-item-group v-model="songs" color="primary">
+                        <v-list-item v-for="(song, i) in selectedEvent.songs" :key="i">
+                          <v-list-item-content>
+                            <v-list-item-title v-text="song.songTitle + ' ' + song.songKey"></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                    </v-container>
+                  </v-row>
+                  <v-row class="ml-5 md-2" align-center justify-center>
+                    <v-container>
+                    <v-list dense>
+                      <p class="text-center">Rota</p>
+                      <v-list-item-group v-model="users" color="primary">
+                        <v-list-item v-for="(user, i) in selectedEvent.rota" :key="i">
+                          <v-list-item-content>
+                            <v-list-item-title v-text="user.displayName + ' ' + user.role"></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                    </v-container>
+                  </v-row>
+                </v-layout>
+                </v-container>
                     <v-card-actions>
                     <v-btn
                         text
