@@ -48,6 +48,93 @@
                 </v-menu>
                 </v-toolbar>
             </v-sheet>
+            <v-dialog v-model="dialog" max-width="700">
+              <v-card>
+                <v-toolbar :color="eventType" dark>
+                  <v-toolbar-title v-html="name"></v-toolbar-title>
+                </v-toolbar>
+                <v-container fluid>
+                <v-layout>
+                  <v-row class="mr-5 md-12" align-center justify-center>
+                    <v-container>
+                      <v-form @submit.prevent="addEvent">
+                        <v-text-field 
+                        autofocus 
+                        dense 
+                        outlined 
+                        v-model="name" 
+                        type="text" 
+                        label="Sermon title (required)"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined 
+                        v-model="scriptures" 
+                        type="text" 
+                        label="Scriptures (required)"></v-text-field>
+                        <v-textarea 
+                        dense 
+                        outlined 
+                        auto-grow 
+                        label="Service details" v-model="details"></v-textarea>
+                        <v-text-field 
+                        dense 
+                        outlined 
+                        v-model="start" 
+                        type="date" 
+                        label="Event start date"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined 
+                        v-model="end" 
+                        type="date" 
+                        label="Event end date"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined 
+                        v-model="worshipDetails" 
+                        type="text" 
+                        label="Worship details"></v-text-field>
+                        <v-select 
+                        outlined 
+                        dense 
+                        v-model="eventType" 
+                        :items="eventTypes" 
+                        label="Choose Type" 
+                        item-text="eType" 
+                        item-value="eColor"></v-select>
+                        <v-btn 
+                        block 
+                        :color="eventType" 
+                        type="submit" 
+                        @click.stop="dialog = false" 
+                        dark>Add</v-btn>
+                      </v-form>
+                    </v-container>
+                  </v-row>
+                  <v-row class="mr-1 md-5" align-center justify-center>
+                    <v-container id="songList">
+                    <v-list dense>
+                      <v-subheader>Song Flow</v-subheader>
+                      <v-list-item-group v-model="songs" color="primary">
+                        <v-list-item v-for="(song, i) in songs" :key="i">
+                          <v-list-item-icon>
+                            <v-icon v-text="icon" @click="deleteSong(i)"></v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title v-text="song.songTitle + ' ' + song.songKey"></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                    </v-container>
+                    <v-text-field id="songT" dense outlined v-model="songT" type="text" label="Song title"></v-text-field>
+                    <v-select id="songK" outlined dense v-model="songK" :items="songKeys" label="Key" item-text="eType"></v-select>
+                    <v-btn block @click.prevent="addSong" dark>Add Song</v-btn>
+                  </v-row>
+                </v-layout>
+                </v-container>
+              </v-card>
+            </v-dialog>
             <v-sheet minHeight="700" height="700" class="ml-3">
                 <v-calendar
                 ref="calendar"
@@ -122,16 +209,30 @@ export default {
         day: 'Day',
         '4day': '4 Days',
       },
-      start: null,
-      end: null,
+      start: '',
+      end: '',
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
       events: [],
       colors: 'blue',
+      icon: 'delete',
       dialog: false,
       name: null,
-      detail: null,
+      details: null,
+      scriptures: null,
+      worshipDetails: null,
+      eventType: null,
+      eventTypes: [
+        {eColor: 'blue', eType: 'Sunday service'},
+        {eColor: 'red', eType: 'Student fellowship'}
+      ],
+      sT: null,
+      sK: null,
+      songs: [],
+      songKey: null,
+      songKeys: ["A", "Ab", "A#", "Bb", "B", "C", "C#", "Db", "D", "D#", "Eb", 
+      "E", "F", "F#", "Gb", "G", "G#"],
       readonly: null
     }),
     computed: {
@@ -173,6 +274,14 @@ export default {
       this.getEvents();
     },
     methods: {
+      addSong() {
+        this.songs.push({songTitle: this.songT, songKey: this.songK});
+        this.songT = null;
+        this.songK = null;
+      },
+      deleteSong(i) {
+        this.songs.splice(i, 1);
+      },
       async getEvents () {
       let snapshot = await db.collection('rota').get()
       const events = []
@@ -182,6 +291,30 @@ export default {
         events.push(appData)
       });
       this.events = events
+    },
+    async addEvent () {
+      if (this.name && this.start && this.end) {
+        await db.collection('rota').add({
+          name: this.name,
+          details: this.details,
+          worshipDetails: this.worshipDetails,
+          scriptures: this.scriptures,
+          start: new Date(this.start).toISOString().substring(0, 10),
+          end: new Date(this.end).toISOString().substring(0, 10),
+          color: this.eventType,
+          songs: this.songs
+        })
+        this.getEvents()
+        this.name = '',
+        this.details = '',
+        this.start = '',
+        this.end = '',
+        this.color = '',
+        this.scriptures = '',
+        this.songs = []
+      } else {
+        alert('You must enter event name, start, and end time')
+      }
     },
       viewDay ({ date }) {
         this.focus = date
@@ -232,3 +365,13 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+  #songT  {
+    width: 50px;
+  }
+
+  #songK  {
+    width: 1px;
+  }
+</style>
