@@ -27,6 +27,7 @@
 <script>
 import TransPanel from '@/components/TransPanel.vue'
 import firebase from "firebase";
+import { db } from '@/main';
 
 export default {
   components: {
@@ -51,6 +52,10 @@ export default {
       .then(data => {
           data.user
             .updateProfile({
+              displayName: this.FirstName + " " + this.LastName
+            })
+            return db.collection('users').add({
+              uid: data.user.uid,
               displayName: this.FirstName + " " + this.LastName
             })
             .then(() => {
