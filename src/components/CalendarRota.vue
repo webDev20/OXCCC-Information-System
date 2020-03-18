@@ -158,6 +158,47 @@
                 </v-container>
               </v-card>
             </v-dialog>
+            <v-dialog v-model="news" max-width="500">
+              <v-card>
+                <v-toolbar :color="newsColor" dark>
+                  <v-toolbar-title v-html="name"></v-toolbar-title>
+                </v-toolbar>
+                    <v-container>
+                      <v-form @submit.prevent="addNews">
+                        <v-text-field 
+                        autofocus 
+                        dense 
+                        outlined 
+                        v-model="name" 
+                        type="text" 
+                        label="News title (required)"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined 
+                        v-model="start" 
+                        type="date" 
+                        label="News start date"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined 
+                        v-model="end" 
+                        type="date" 
+                        label="News end date"></v-text-field>
+                        <v-textarea 
+                        dense 
+                        outlined 
+                        auto-grow 
+                        label="Enter the news information" v-model="newsDetails"></v-textarea>
+                        <v-btn 
+                        block 
+                        :color="newsColor" 
+                        type="submit" 
+                        @click.stop="news = false" 
+                        dark>Save news</v-btn>
+                      </v-form>
+                    </v-container>
+              </v-card>
+            </v-dialog>
             <v-sheet minHeight="700" height="700" class="ml-3">
                 <v-calendar
                 ref="calendar"
@@ -174,6 +215,7 @@
                 @change="updateRange"
                 ></v-calendar>
                 <v-menu
+                v-if="selectedEvent.color != 'green'"
                 v-model="selectedOpen"
                 :close-on-content-click="false"
                 :activator="selectedElement"
@@ -196,7 +238,7 @@
                     </v-btn>
                     <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                     </v-toolbar>
-                  <v-container fluid v-if="editMode !== selectedEvent.id" >
+                  <v-container fluid v-if="editMode !== selectedEvent.id">
                   <v-layout>
                     <v-row class="mr-5 md-12" align-center justify-center>
                       <v-container>
@@ -441,6 +483,113 @@
                     </v-card-actions>
                 </v-card>
                 </v-menu>
+                <v-menu
+                v-else
+                v-model="selectedOpen"
+                :close-on-content-click="false"
+                :activator="selectedElement"
+                offset-x
+                >
+                <v-card
+                    color="grey lighten-4"
+                    min-width="725px"
+                    flat
+                >
+                    <v-toolbar
+                    :color="selectedEvent.color"
+                    dark
+                    >
+                    <v-btn 
+                    icon 
+                    v-if="edit !== selectedEvent.id"
+                    @click.prevent="editNews(selectedEvent)">
+                        <v-icon >mdi-pencil</v-icon>
+                    </v-btn>
+                    <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+                    </v-toolbar>
+                    <v-container fluid v-if="editMode !== selectedEvent.id">
+                      <v-form>
+                        <v-text-field 
+                        readonly 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.name" 
+                        type="text" 
+                        label="News title (required)"></v-text-field>
+                        <v-text-field
+                        readonly 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.start" 
+                        type="date" 
+                        label="News start date"></v-text-field>
+                        <v-text-field
+                        readonly 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.end" 
+                        type="date" 
+                        label="News end date"></v-text-field>
+                        <v-textarea
+                        readonly
+                        dense 
+                        outlined 
+                        auto-grow 
+                        label="Enter the news information" v-model="selectedEvent.newsDetails"></v-textarea>
+                      </v-form>
+                    </v-container>
+                    <v-container fluid v-else>
+                      <v-form @submit.prevent="updateNews">
+                        <v-text-field 
+                        autofocus 
+                        dense 
+                        outlined
+                        v-model="selectedEvent.name" 
+                        type="text" 
+                        label="News title (required)"></v-text-field>
+                        <v-text-field 
+                        autofocus 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.name" 
+                        type="text" 
+                        label="News title (required)"></v-text-field>
+                        <v-text-field
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.start" 
+                        type="date" 
+                        label="News start date"></v-text-field>
+                        <v-text-field
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.end" 
+                        type="date" 
+                        label="News end date"></v-text-field>
+                        <v-textarea
+                        dense 
+                        outlined 
+                        auto-grow 
+                        label="Enter the news information"
+                        v-if="selectedEvent.newsDetails != null"
+                        v-model="selectedEvent.newsDetails"></v-textarea>
+                        <v-textarea
+                        dense 
+                        outlined 
+                        auto-grow 
+                        label="Enter the news information"
+                        v-else
+                        v-model="newsDetails"></v-textarea>
+                        <v-btn 
+                        block 
+                        :color="newsColor" 
+                        type="submit"
+                        @click.stop="news = false"
+                        dark>Update news</v-btn>
+                      </v-form>
+                    </v-container>
+                </v-card>
+                </v-menu>
             </v-sheet>
             </v-col>
         </v-row>
@@ -479,7 +628,6 @@ export default {
         {eColor: 'red', eType: 'Student fellowship'}
       ],
       songT: null,
-      sK: null,
       songs: [],
       songKey: null,
       songKeys: ["A", "Ab", "A#", "Bb", "B", "C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#"],
@@ -488,7 +636,9 @@ export default {
       roles: ["Worship leader","Vocalist", "Piano (Keyboard)", "Drummer", "AV", "Speaker translator", "Chair person"],
       user: null,
       users: [],
-      editMode: null
+      editMode: null,
+      newsColor: 'green',
+      newsDetails: null
     }),
     computed: {
       title () {
@@ -525,15 +675,57 @@ export default {
         })
       },
     },
-    mounted () {
+    mounted: function () {
       this.getEvents();
       this.getUsers();
     },
     methods: {
-      newRota() {
-        this.rota = [],
-        this.user = null,
-        this.role = null;
+      editNews (selectedEvent) {
+        this.editMode = selectedEvent.id;
+        if (selectedEvent.newsDetails == null) {
+          this.newsDetails = null;
+          console.log(this.newsDetails);
+        } else {
+          this.newsDetails = selectedEvent.newsDetails;
+          console.log(this.newsDetails);
+        }
+        this.name = selectedEvent.name;
+        this.start = selectedEvent.start;
+        this.end = selectedEvent.end;
+      },
+      async updateNews() {
+        await db.collection('rota').doc(this.editMode).update({
+          name: this.name,
+          newsDetails: this.newsDetails,
+          color: this.newsColor,
+          start: new Date(this.start).toISOString().substring(0, 10),
+          end: new Date(this.end).toISOString().substring(0, 10)
+        });
+        this.getEvents();
+        this.selectedOpen = false,
+        this.editMode = null,
+        this.name = '',
+        this.start = '',
+        this.end = '',
+        this.newsDetails = null
+      },
+      async addNews() {
+        if (this.name && this.start && this.end) {
+          await db.collection('rota').add({
+            name: this.name,
+            start: new Date(this.start).toISOString().substring(0, 10),
+            end: new Date(this.end).toISOString().substring(0, 10),
+            newsDetails: this.newsDetails,
+            color: this.newsColor,
+          });
+          this.getEvents()
+          this.name = '',
+          this.start = '',
+          this.end = ''
+          this.newsDetails = null
+        } else {
+          alert('You must enter News title, start, and end time')
+        }
       },
       async updateEvent() {
         await db.collection('rota').doc(this.editMode).update({
@@ -546,7 +738,7 @@ export default {
           color: this.selectedEvent.color,
           songs: this.songs,
           rota: this.rota
-        })
+        });
         this.getEvents();
         this.selectedOpen = false,
         this.editMode = null,
