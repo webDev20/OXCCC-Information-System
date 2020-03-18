@@ -347,8 +347,17 @@
                         <v-text-field 
                         autofocus 
                         dense 
-                        outlined 
+                        outlined
+                        v-if="selectedevent.name != null"
                         v-model="selectedEvent.name" 
+                        type="text" 
+                        label="Sermon title (required)"></v-text-field>
+                        <v-text-field 
+                        autofocus 
+                        dense 
+                        outlined
+                        v-else
+                        v-model="name" 
                         type="text" 
                         label="Sermon title (required)"></v-text-field>
                         <v-text-field 
@@ -381,13 +390,29 @@
                         v-model="selectedEvent.details"></v-textarea>
                         <v-text-field 
                         dense 
-                        outlined 
+                        outlined
+                        v-if="selectedEvent.start != null"
                         v-model="selectedEvent.start" 
                         type="date" 
                         label="Event start date"></v-text-field>
                         <v-text-field 
                         dense 
-                        outlined 
+                        outlined
+                        v-else
+                        v-model="selectedEvent.start" 
+                        type="date" 
+                        label="Event start date"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined
+                        v-if="selectedEvent.end != null"
+                        v-model="selectedEvent.end" 
+                        type="date" 
+                        label="Event end date"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined
+                        v-else
                         v-model="selectedEvent.end" 
                         type="date" 
                         label="Event end date"></v-text-field>
@@ -573,26 +598,44 @@
                         autofocus 
                         dense 
                         outlined
+                        v-if="selectedElement.name != null"
                         v-model="selectedEvent.name" 
                         type="text" 
                         label="News title (required)"></v-text-field>
                         <v-text-field 
                         autofocus 
                         dense 
-                        outlined 
-                        v-model="selectedEvent.name" 
+                        outlined
+                        v-else
+                        v-model="name" 
                         type="text" 
                         label="News title (required)"></v-text-field>
                         <v-text-field
                         dense 
-                        outlined 
+                        outlined
+                        v-if="selectedEvent.start != null"
                         v-model="selectedEvent.start" 
                         type="date" 
                         label="News start date"></v-text-field>
                         <v-text-field
                         dense 
-                        outlined 
+                        outlined
+                        v-else
+                        v-model="start" 
+                        type="date" 
+                        label="News start date"></v-text-field>
+                        <v-text-field
+                        dense 
+                        outlined
+                        v-if="selectedEvent.end != null"
                         v-model="selectedEvent.end" 
+                        type="date" 
+                        label="News end date"></v-text-field>
+                        <v-text-field
+                        dense 
+                        outlined
+                        v-else
+                        v-model="end" 
                         type="date" 
                         label="News end date"></v-text-field>
                         <v-textarea
@@ -643,6 +686,7 @@
 
 <script>
 import { db } from '@/main';
+import firebase from "firebase";
 export default {
     data: () => ({
       focus: '',
@@ -749,6 +793,8 @@ export default {
           name: this.name,
           newsDetails: this.newsDetails,
           color: this.newsColor,
+          startDate: new firebase.firestore.Timestamp.fromDate(new Date(this.start + "T00:00:00")),
+          endDate: new firebase.firestore.Timestamp.fromDate(new Date(this.end + "T00:00:00")),
           start: new Date(this.start).toISOString().substring(0, 10),
           end: new Date(this.end).toISOString().substring(0, 10)
         });
@@ -764,6 +810,8 @@ export default {
         if (this.name && this.start && this.end) {
           await db.collection('rota').add({
             name: this.name,
+            startDate: new firebase.firestore.Timestamp.fromDate(new Date(this.start + "T00:00:00")),
+            endDate: new firebase.firestore.Timestamp.fromDate(new Date(this.end + "T00:00:00")),
             start: new Date(this.start).toISOString().substring(0, 10),
             end: new Date(this.end).toISOString().substring(0, 10),
             newsDetails: this.newsDetails,
@@ -784,6 +832,8 @@ export default {
           details: this.details,
           worshipDetails: this.worshipDetails,
           scriptures: this.scriptures,
+          startDate: new firebase.firestore.Timestamp.fromDate(new Date(this.start + "T00:00:00")),
+          endDate: new firebase.firestore.Timestamp.fromDate(new Date(this.end + "T00:00:00")),
           start: new Date(this.start).toISOString().substring(0, 10),
           end: new Date(this.end).toISOString().substring(0, 10),
           color: this.selectedEvent.color,
@@ -805,9 +855,21 @@ export default {
       },
       edit (selectedEvent) {
         this.editMode = selectedEvent.id;
-        this.name = selectedEvent.name;
-        this.start = selectedEvent.start;
-        this.end = selectedEvent.end;
+        if (selectedEvent.name == null) {
+          this.name = null
+        } else {
+          this.name = selectedEvent.name;
+        }
+        if (selectedEvent.start == null) {
+          this.start = ''
+        } else {
+          this.start = selectedEvent.start;
+        }
+        if (selectedEvent.end == null) {
+          this.end = ''
+        } else {
+          this.end = selectedEvent.end;
+        }
         if (selectedEvent.eventType == null) {
           this.eventType = null;
         } else {
@@ -882,6 +944,8 @@ export default {
             details: this.details,
             worshipDetails: this.worshipDetails,
             scriptures: this.scriptures,
+            startDate: new firebase.firestore.Timestamp.fromDate(new Date(this.start + "T00:00:00")),
+            endDate: new firebase.firestore.Timestamp.fromDate(new Date(this.end + "T00:00:00")),
             start: new Date(this.start).toISOString().substring(0, 10),
             end: new Date(this.end).toISOString().substring(0, 10),
             color: this.eventType,
