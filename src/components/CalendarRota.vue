@@ -475,10 +475,17 @@
                     <v-card-actions>
                     <v-btn
                         text
-                        color="secondary"
+                        color="primary"
                         @click="selectedOpen = false"
                     >
                         Close
+                    </v-btn>
+                    <v-btn
+                        text
+                        color="red accent-4"
+                        @click="selectedOpen = false"
+                    >
+                        Delete
                     </v-btn>
                     </v-card-actions>
                 </v-card>
@@ -588,6 +595,22 @@
                         dark>Update news</v-btn>
                       </v-form>
                     </v-container>
+                      <v-card-actions>
+                        <v-btn
+                            text
+                            color="primary"
+                            @click="selectedOpen = false"
+                        >
+                            Close
+                        </v-btn>
+                        <v-btn
+                            text
+                            color="red accent-4"
+                            @click="selectedOpen = false"
+                        >
+                            Delete
+                        </v-btn>
+                      </v-card-actions>
                 </v-card>
                 </v-menu>
             </v-sheet>
