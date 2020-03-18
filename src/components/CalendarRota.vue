@@ -199,6 +199,28 @@
                     </v-container>
               </v-card>
             </v-dialog>
+            <v-dialog v-if="selectedEvent.color != 'green'" v-model="deleteDialog" persistent max-width="250">
+              <v-card>
+                <v-card-title class="headline">Confirm delete ?</v-card-title>
+                <v-card-text>This rota will be deleted forever, are you sure?</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="deleteDialog = false">Cancel</v-btn>
+                  <v-btn text color="red accent-4" @click="deleteDialog = false">Delete</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <v-dialog v-else v-model="deleteDialog" persistent max-width="250">
+              <v-card>
+                <v-card-title class="headline">Confirm delete ?</v-card-title>
+                <v-card-text>This news will be deleted forever, are you sure?</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="primary" @click="deleteDialog = false">Cancel</v-btn>
+                  <v-btn text color="red accent-4" @click="deleteDialog = false">Delete</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
             <v-sheet minHeight="700" height="700" class="ml-3">
                 <v-calendar
                 ref="calendar"
@@ -483,7 +505,7 @@
                     <v-btn
                         text
                         color="red accent-4"
-                        @click="selectedOpen = false"
+                        @click="deleteDialog = true"
                     >
                         Delete
                     </v-btn>
@@ -606,7 +628,7 @@
                         <v-btn
                             text
                             color="red accent-4"
-                            @click="selectedOpen = false"
+                            @click="deleteDialog = true"
                         >
                             Delete
                         </v-btn>
@@ -641,6 +663,7 @@ export default {
       icon: 'delete',
       dialog: false,
       news: false,
+      deleteDialog: false,
       name: null,
       details: null,
       scriptures: null,
