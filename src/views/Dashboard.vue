@@ -4,51 +4,58 @@
         <v-layout align-center justify-center class="ma-8 text-center">
             <v-row class="ma-0 ml-8 md-12">
                 <TransPanel dynamicID="assignedWorship">
-                    <p id="worship_Counter">Counter{{wCounter}}</p>
+                    <p id="worship_Counter">Under construction{{wCounter}}</p>
                     <p id="worshipTxt" class="headline">Assigned Worships</p>
                 </TransPanel>
             </v-row>
             <v-row class="ma-0 md-12">
                 <TransPanel dynamicID="pendingReq">
-                    <p id="pendReq_Counter">Counter{{prCounter}}</p>
+                    <p id="pendReq_Counter">Under contrusction{{prCounter}}</p>
                     <p id="pendingTxt" class="headline">Pending Swap Request</p>
                 </TransPanel>
             </v-row>
         </v-layout>
         <v-layout align-center justify-center class="mt-10 text-center">
-            <v-row class="mb-12 ml-5 md-12">
+            <v-row class="mb-4 ml-8 md-12">
             <v-container class="news_Events">
-                <p id="newsEvent_Heading" class="headline text-center ">News &amp; Events</p>
-                <TransPanel dynamicID="newsEvents_P">
-                    <ul id="newsEvent_List">
-                        <li class="neList"><a class="neList_Item" href="_blank">News</a></li>
-                        <li class="neList"><a class="neList_Item" href="_blank">News</a></li>
-                        <li class="neList"><a class="neList_Item" href="_blank">Events</a></li>
-                        <li class="neList"><a class="neList_Item" href="_blank">Events</a></li>
-                    </ul>
-                </TransPanel>
+                <v-card class="mx-auto" max-width="600">
+                <v-carousel 
+                cycle 
+                height="300" 
+                hide-delimiter-background  
+                show-arrows-on-hover>
+                    <v-carousel-item
+                        :key="newS.key"
+                        v-for="newS in newsList">
+                        <v-sheet
+                            color="green"
+                            height="100%">
+                            <v-row
+                                class="fill-height"
+                                align="center"
+                                justify="center"
+                            >
+                            <p class="display-1 text--primary">
+                                {{newS.name}}
+                            </p>
+                            <p id="newsText">
+                                {{newS.newsDetails}}
+                            </p>
+                            </v-row>
+                        </v-sheet>
+                    </v-carousel-item>
+                </v-carousel>
+                </v-card>
             </v-container>
             </v-row>
             <v-row class="ma-0 md-12">
                 <v-container class="upComing_Worship">
-                    <p id="upC_WorshipHeading" class="text-center headline ml-5 mb-6">Upcoming Worship</p>
-                    <ul id="upC_Worship_List" class="mt-8">
-                        <li class="listItem">
+                    <p id="upC_WorshipHeading" class="text-center display-1 text--primary mx-auto">Upcoming Worship</p>
+                    <ul id="upC_Worship_List" class="mt-10">
+                        <li class="listItem" :key="event.key" v-for="event in events">
                             <div class="listContent">
-                                <p>Event name</p>
-                                <p>Event date</p>
-                            </div>
-                        </li>
-                        <li class="listItem">
-                            <div class="listContent">
-                                <p>Event name</p>
-                                <p>Event date</p>
-                            </div>
-                        </li>
-                        <li class="listItem">
-                            <div class="listContent">
-                                <p>Event name</p>
-                                <p>Event date</p>
+                                <p class=".subtitle-1">{{event.name}}</p>
+                                <p>Worship date: {{event.start}}</p>
                             </div>
                         </li>
                     </ul>
@@ -61,11 +68,53 @@
 <script>
 import appNavPBar from '@/components/appNavPBar.vue'
 import TransPanel from '@/components/TransPanel.vue'
+import { db } from '@/main';
 
 export default {
     components: {
         appNavPBar,
         TransPanel
+    },
+    data: function () {
+        return {
+            wCounter: '',
+            prCounter: '',
+            iconList: ['looks_one', 'looks_two', 'looks_3', 'looks_4', 'looks_5', 'looks_6'],
+            events: [],
+            newsList: []
+        }
+    },
+    mounted: function () {
+        this.getEvents();
+        this.getNews();
+    },
+    methods: {
+        async getEvents () {
+        let snapshot = await db.collection('rota')
+        .where('news', '==', false)
+        .where('startDate', '>', new Date())
+        .orderBy('startDate', 'asc')
+        .limit(3)
+        .get()
+        const events = []
+        snapshot.forEach(doc => {
+          let appData = doc.data()
+          appData.id = doc.id
+          events.push(appData)
+        });
+        this.events = events
+        },
+    async getNews () {
+        let snapshotN = await db.collection('rota')
+        .where('news', '==', true).get()
+        const news = []
+        snapshotN.forEach(doc => {
+          let nData = doc.data()
+          nData.id = doc.id
+          news.push(nData)
+        });
+        this.newsList = news
+        }
     }
 }
 </script>
@@ -116,6 +165,10 @@ export default {
         text-decoration: none;
     }
 
+    #newsText {
+        width: 500px;
+    }
+
     .upComing_Worship {
         margin-right: 100px;
     }
@@ -128,7 +181,8 @@ export default {
     }
 
     .listItem {
-        color: white;
+        color: darkmagenta;
+        font-size: 22px;
     }
 
     .listContent {
@@ -149,18 +203,18 @@ export default {
         border: 1.25px solid lightblue;
         border-radius: 1em;
         display: inline-block;
-        height: 24px;
-        width: 23px;
+        height: 40px;
+        width: 40px;
         text-align: center;
-        line-height: 24px;
+        line-height: 38px;
         background: dodgerblue;
     }
     #upC_Worship_List .listItem:before {
         position: absolute;
-        left: 13px;
+        left: 21px;
         top: 0;
         content: "";
-        height: 125%;
+        height: 120%;
         width: 0;
         border-left: 3.5px solid dodgerblue;
     }

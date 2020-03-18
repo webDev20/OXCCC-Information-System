@@ -688,48 +688,50 @@
 import { db } from '@/main';
 import firebase from "firebase";
 export default {
-    data: () => ({
-      focus: '',
-      type: 'month',
-      typeToLabel: {
-        month: 'Month',
-        week: 'Week',
-        day: 'Day',
-        '4day': '4 Days',
-      },
-      start: '',
-      end: '',
-      selectedEvent: {},
-      selectedElement: null,
-      selectedOpen: false,
-      events: [],
-      colors: 'blue',
-      icon: 'delete',
-      dialog: false,
-      news: false,
-      deleteDialog: false,
-      name: null,
-      details: null,
-      scriptures: null,
-      worshipDetails: null,
-      eventType: null,
-      eventTypes: [
-        {eColor: 'blue', eType: 'Sunday service'},
-        {eColor: 'red', eType: 'Student fellowship'}
-      ],
-      songT: null,
-      songs: [],
-      songKey: null,
-      songKeys: ["A", "Ab", "A#", "Bb", "B", "C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#"],
-      rota: [],
-      role: null,
-      roles: ["Worship leader","Vocalist", "Piano (Keyboard)", "Drummer", "AV", "Speaker translator", "Chair person"],
-      user: null,
-      users: [],
-      editMode: null,
-      newsColor: 'green',
-      newsDetails: null
-    }),
+    data: function() {
+      return {
+        focus: '',
+        type: 'month',
+        typeToLabel: {
+          month: 'Month',
+          week: 'Week',
+          day: 'Day',
+          '4day': '4 Days',
+        },
+        start: '',
+        end: '',
+        selectedEvent: {},
+        selectedElement: null,
+        selectedOpen: false,
+        events: [],
+        colors: 'blue',
+        icon: 'delete',
+        dialog: false,
+        news: false,
+        deleteDialog: false,
+        name: null,
+        details: null,
+        scriptures: null,
+        worshipDetails: null,
+        eventType: null,
+        eventTypes: [
+          {eColor: 'blue', eType: 'Sunday service'},
+          {eColor: 'red', eType: 'Student fellowship'}
+        ],
+        songT: null,
+        songs: [],
+        songKey: null,
+        songKeys: ["A", "Ab", "A#", "Bb", "B", "C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#"],
+        rota: [],
+        role: null,
+        roles: ["Worship leader","Vocalist", "Piano (Keyboard)", "Drummer", "AV", "Speaker translator", "Chair person"],
+        user: null,
+        users: [],
+        editMode: null,
+        newsColor: 'green',
+        newsDetails: null
+      }
+    },
     computed: {
       title () {
         const { start, end } = this
@@ -816,6 +818,7 @@ export default {
             end: new Date(this.end).toISOString().substring(0, 10),
             newsDetails: this.newsDetails,
             color: this.newsColor,
+            news: true
           });
           this.getEvents()
           this.name = '',
@@ -950,7 +953,8 @@ export default {
             end: new Date(this.end).toISOString().substring(0, 10),
             color: this.eventType,
             songs: this.songs,
-            rota: this.rota
+            rota: this.rota,
+            news: false
           })
           this.getEvents()
           this.name = '',
