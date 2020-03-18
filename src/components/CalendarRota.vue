@@ -16,7 +16,10 @@
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" dark @click.stop="dialog = true">
-                  New Event
+                  New rota
+                </v-btn>
+                <v-btn id="newsBtn" color="success" class="ml-3" dark @click.stop="news = true">
+                  New news
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-menu bottom right>
@@ -465,6 +468,7 @@ export default {
       colors: 'blue',
       icon: 'delete',
       dialog: false,
+      news: false,
       name: null,
       details: null,
       scriptures: null,
