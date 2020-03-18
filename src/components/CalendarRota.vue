@@ -206,7 +206,7 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="deleteDialog = false">Cancel</v-btn>
-                  <v-btn text color="red accent-4" @click="deleteDialog = false">Delete</v-btn>
+                  <v-btn text color="red accent-4" @click="deleteEN(selectedEvent.id)">Delete</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -217,7 +217,7 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="deleteDialog = false">Cancel</v-btn>
-                  <v-btn text color="red accent-4" @click="deleteDialog = false">Delete</v-btn>
+                  <v-btn text color="red accent-4" @click="deleteEN(selectedEvent.id)">Delete</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -726,6 +726,11 @@ export default {
       this.getUsers();
     },
     methods: {
+      async deleteEN(selectedEvent) {
+        await db.collection('rota').doc(selectedEvent).delete()
+        this.deleteDialog = false,
+        this.getEvents()
+      },
       editNews (selectedEvent) {
         this.editMode = selectedEvent.id;
         if (selectedEvent.newsDetails == null) {
