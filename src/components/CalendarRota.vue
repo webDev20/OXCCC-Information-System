@@ -178,28 +178,262 @@
                 >
                 <v-card
                     color="grey lighten-4"
-                    min-width="350px"
+                    min-width="725px"
                     flat
                 >
                     <v-toolbar
                     :color="selectedEvent.color"
                     dark
                     >
-                    <v-btn icon>
-                        <v-icon>mdi-pencil</v-icon>
+                    <v-btn 
+                    icon 
+                    v-if="edit !== selectedEvent.id"
+                    @click.prevent="edit(selectedEvent)">
+                        <v-icon >mdi-pencil</v-icon>
                     </v-btn>
                     <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                     </v-toolbar>
-                    <v-card-text>
-                    <span v-html="selectedEvent.details"></span>
-                    </v-card-text>
+                  <v-container fluid v-if="editMode !== selectedEvent.id" >
+                  <v-layout>
+                    <v-row class="mr-5 md-12" align-center justify-center>
+                      <v-container>
+                        <v-form>
+                          <v-text-field
+                          readonly
+                          dense
+                          outlined 
+                          v-model="selectedEvent.name" 
+                          type="text" 
+                          label="Sermon title (required)"></v-text-field>
+                          <v-text-field
+                          readonly
+                          dense 
+                          outlined 
+                          v-model="selectedEvent.scriptures" 
+                          type="text" 
+                          label="Scriptures (required)"></v-text-field>
+                          <v-textarea 
+                          readonly
+                          dense 
+                          outlined 
+                          auto-grow 
+                          label="Service details" v-model="selectedEvent.details"></v-textarea>
+                          <v-text-field
+                          readonly
+                          dense 
+                          outlined 
+                          v-model="selectedEvent.start" 
+                          type="date" 
+                          label="Event start date"></v-text-field>
+                          <v-text-field
+                          readonly
+                          dense 
+                          outlined 
+                          v-model="selectedEvent.end" 
+                          type="date" 
+                          label="Event end date"></v-text-field>
+                          <v-text-field
+                          readonly
+                          dense 
+                          outlined 
+                          v-model="selectedEvent.worshipDetails" 
+                          type="text" 
+                          label="Worship details"></v-text-field>
+                        </v-form>
+                      </v-container>
+                    </v-row>
+                    <v-row class="mr-1 md-5" align-center justify-center>
+                      <v-container id="songList">
+                      <v-list dense>
+                        <p class="text-center">Song Flow</p>
+                        <v-list-item-group v-model="songs" color="primary">
+                          <v-list-item v-for="(song, i) in selectedEvent.songs" :key="i">
+                            <v-list-item-content>
+                              <v-list-item-title v-text="song.songTitle + ' ' + song.songKey"></v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-list-item-group>
+                      </v-list>
+                      </v-container>
+                    </v-row>
+                    <v-row class="ml-5 md-2" align-center justify-center>
+                      <v-container>
+                      <v-list dense>
+                        <p class="text-center">Rota</p>
+                        <v-list-item-group v-model="users" color="primary">
+                          <v-list-item v-for="(user, i) in selectedEvent.rota" :key="i">
+                            <v-list-item-content>
+                              <v-list-item-title v-text="user.displayName + ' ' + user.role"></v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-list-item-group>
+                      </v-list>
+                      </v-container>
+                    </v-row>
+                  </v-layout>
+                  </v-container>
+                <v-container fluid v-else>
+                <v-layout>
+                  <v-row class="mr-5 md-12" align-center justify-center>
+                    <v-container>
+                      <v-form @submit.prevent="updateEvent">
+                        <v-text-field 
+                        autofocus 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.name" 
+                        type="text" 
+                        label="Sermon title (required)"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined
+                        v-if="selectedEvent.scriptures != null"
+                        v-model="selectedEvent.scriptures" 
+                        type="text" 
+                        label="Scriptures (required)"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined
+                        v-else
+                        v-model="scriptures" 
+                        type="text" 
+                        label="Scriptures (required)"></v-text-field>
+                        <v-textarea 
+                        dense 
+                        outlined 
+                        auto-grow 
+                        label="Service details"
+                        v-if="selectedEvent.details == null" 
+                        v-model="selectedEvent.details"></v-textarea>
+                        <v-textarea 
+                        dense 
+                        outlined 
+                        auto-grow 
+                        label="Service details"
+                        v-else 
+                        v-model="selectedEvent.details"></v-textarea>
+                        <v-text-field 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.start" 
+                        type="date" 
+                        label="Event start date"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined 
+                        v-model="selectedEvent.end" 
+                        type="date" 
+                        label="Event end date"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined
+                        v-if="selectedEvent.worshipDetails != null" 
+                        v-model="selectedEvent.worshipDetails" 
+                        type="text" 
+                        label="Worship details"></v-text-field>
+                        <v-text-field 
+                        dense 
+                        outlined
+                        v-else 
+                        v-model="worshipDetails" 
+                        type="text" 
+                        label="Worship details"></v-text-field>
+                        <v-select 
+                        outlined 
+                        dense 
+                        v-model="selectedEvent.color" 
+                        :items="eventTypes" 
+                        label="Choose Type" 
+                        item-text="eType" 
+                        item-value="eColor"></v-select>
+                        <v-btn 
+                        block 
+                        :color="eventType" 
+                        type="submit" 
+                        @click.stop="dialog = false" 
+                        dark>Update</v-btn>
+                      </v-form>
+                    </v-container>
+                  </v-row>
+                  <v-row class="mr-1 md-5" align-center justify-center>
+                    <v-container id="songList" v-if="selectedEvent.songs != null">
+                    <v-list dense>
+                      <p class="text-center">Song Flow</p>
+                      <v-list-item-group v-model="selectedEvent.songs" color="primary"> <!--potential error --> 
+                        <v-list-item v-for="(song, i) in selectedEvent.songs" :key="i">
+                          <v-list-item-icon>
+                            <v-icon v-text="icon" @click="deleteSong(i)"></v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title v-text="song.songTitle + ' ' + song.songKey"></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                    </v-container>
+                    <v-container id="songList" v-else>
+                    <v-list dense>
+                      <p class="text-center">Song Flow</p>
+                      <v-list-item-group v-model="songs" color="primary"> <!--potential error --> 
+                        <v-list-item v-for="(song, i) in songs" :key="i">
+                          <v-list-item-icon>
+                            <v-icon v-text="icon" @click="deleteSong(i)"></v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title v-text="song.songTitle + ' ' + song.songKey"></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                    </v-container>
+                    <v-text-field id="songT" dense outlined v-model="songT" type="text" label="Song title"></v-text-field>
+                    <v-select id="songK" outlined dense v-model="songKey" :items="songKeys" label="Key" item-text="eType"></v-select>
+                    <v-btn block @click.prevent="addSong" dark>Add Song</v-btn>
+                  </v-row>
+                  <v-row class="ml-5 md-2" align-center justify-center>
+                    <v-container v-if="selectedEvent.rota != null">
+                    <v-list dense>
+                      <p class="text-center">Rota</p>
+                      <v-list-item-group v-model="selectedEvent.users" color="primary">
+                        <v-list-item v-for="(user, i) in selectedEvent.rota" :key="i">
+                          <v-list-item-icon>
+                            <v-icon v-text="icon" @click="deleteUser(i)"></v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title v-text="user.displayName + ' ' + user.role"></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                    </v-container>
+                    <v-container v-else>
+                    <v-list dense>
+                      <p class="text-center">Rota</p>
+                      <v-list-item-group v-model="users" color="primary">
+                        <v-list-item v-for="(user, i) in rota" :key="i">
+                          <v-list-item-icon>
+                            <v-icon v-text="icon" @click="deleteUser(i)"></v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-content>
+                            <v-list-item-title v-text="user.displayName + ' ' + user.role"></v-list-item-title>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                    </v-container>
+                    <v-select id="userlist" outlined dense v-model="user" :items="users" label="Add user" item-text="displayName"></v-select>
+                    <v-select id="rolelist" outlined dense v-model="role" :items="roles" label="Role"></v-select>
+                    <v-btn block @click.prevent="addRota" dark>Add to rota</v-btn>
+                  </v-row>
+                </v-layout>
+                </v-container>
                     <v-card-actions>
                     <v-btn
                         text
                         color="secondary"
                         @click="selectedOpen = false"
                     >
-                        Cancel
+                        Close
                     </v-btn>
                     </v-card-actions>
                 </v-card>
@@ -250,7 +484,7 @@ export default {
       roles: ["Worship leader","Vocalist", "Piano (Keyboard)", "Drummer", "AV", "Speaker translator", "Chair person"],
       user: null,
       users: [],
-      readonly: null
+      editMode: null
     }),
     computed: {
       title () {
@@ -292,6 +526,72 @@ export default {
       this.getUsers();
     },
     methods: {
+      newRota() {
+        this.rota = [],
+        this.user = null,
+        this.role = null;
+      },
+      async updateEvent() {
+        await db.collection('rota').doc(this.editMode).update({
+          name: this.name,
+          details: this.details,
+          worshipDetails: this.worshipDetails,
+          scriptures: this.scriptures,
+          start: new Date(this.start).toISOString().substring(0, 10),
+          end: new Date(this.end).toISOString().substring(0, 10),
+          color: this.selectedEvent.color,
+          songs: this.songs,
+          rota: this.rota
+        })
+        this.getEvents();
+        this.selectedOpen = false,
+        this.editMode = null,
+        this.name = '',
+        this.details = '',
+        this.worshipDetails = '',
+        this.start = '',
+        this.end = '',
+        this.color = '',
+        this.scriptures = '',
+        this.songs = [],
+        this.rota = []
+      },
+      edit (selectedEvent) {
+        this.editMode = selectedEvent.id;
+        this.name = selectedEvent.name;
+        this.start = selectedEvent.start;
+        this.end = selectedEvent.end;
+        if (selectedEvent.eventType == null) {
+          this.eventType = null;
+        } else {
+          this.eventType = selectedEvent.eventType;
+        }
+        if (selectedEvent.details == null) {
+          this.details = null;
+        } else {
+          this.details = selectedEvent.details;
+        }
+        if (selectedEvent.worshipDetails == null) {
+          this.worshipDetails = null;
+        } else {
+          this.worshipDetails = selectedEvent.worshipDetails;
+        }
+        if (selectedEvent.worshipDetails == null) {
+          this.scriptures = null;
+        } else {
+          this.scriptures = selectedEvent.scriptures;
+        }
+        if (selectedEvent.songs == null) {
+          this.songs = [];
+        } else {
+          this.songs = selectedEvent.songs;
+        }
+        if (selectedEvent.rota == null) {
+          this.rota = [];
+        } else {
+          this.rota = selectedEvent.rota;
+        }
+      },
       addRota() {
         this.rota.push({displayName: this.user, role: this.role});
         this.user = null;
@@ -338,18 +638,21 @@ export default {
             start: new Date(this.start).toISOString().substring(0, 10),
             end: new Date(this.end).toISOString().substring(0, 10),
             color: this.eventType,
-            songs: this.songs
+            songs: this.songs,
+            rota: this.rota
           })
           this.getEvents()
           this.name = '',
           this.details = '',
+          this.worshipDetails = '',
           this.start = '',
           this.end = '',
           this.color = '',
           this.scriptures = '',
-          this.songs = []
+          this.songs = [],
+          this.rota = []
         } else {
-          alert('You must enter event name, start, and end time')
+          alert('You must enter service title, start, and end time')
         }
       },
       viewDay ({ date }) {
