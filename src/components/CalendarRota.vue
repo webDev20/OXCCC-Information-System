@@ -164,18 +164,20 @@
                   <v-toolbar-title v-html="name"></v-toolbar-title>
                 </v-toolbar>
                     <v-container>
-                      <v-form @submit.prevent="addNews">
+                      <v-form v-model="valid" @submit.prevent="addNews">
                         <v-text-field 
                         autofocus 
                         dense 
-                        outlined 
+                        outlined
+                        :rules="[rules.required]"
                         v-model="name" 
                         type="text" 
                         label="News title (required)"></v-text-field>
                         <v-text-field 
                         dense 
                         outlined 
-                        v-model="start" 
+                        v-model="start"
+                        :rules="[rules.required]"
                         type="date" 
                         label="News start date"></v-text-field>
                         <v-text-field 
@@ -187,12 +189,14 @@
                         <v-textarea 
                         dense 
                         outlined 
-                        auto-grow 
+                        auto-grow
+                        :rules="[rules.required]"
                         label="Enter the news information" v-model="newsDetails"></v-textarea>
                         <v-btn 
                         block 
                         :color="newsColor" 
-                        type="submit" 
+                        type="submit"
+                        :disabled="!valid" 
                         @click.stop="news = false" 
                         dark>Save news</v-btn>
                       </v-form>
@@ -729,7 +733,11 @@ export default {
         users: [],
         editMode: null,
         newsColor: 'green',
-        newsDetails: null
+        newsDetails: null,
+        rules: {
+        required: value => !!value || 'Required.',
+        },
+        valid: false
       }
     },
     computed: {
