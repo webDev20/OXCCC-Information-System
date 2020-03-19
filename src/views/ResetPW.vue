@@ -8,9 +8,9 @@
         </h2>
         <v-layout align-center justify-center>
             <TransPanel dynamicID="resetPW_Form" class="ma-0">
-                <v-form> 
-                    <v-text-field v-model="Email" label="E-mail" required dark></v-text-field>
-                    <v-btn class="my-3" @click.prevent="sendResetPWEmail" block dark>Reset password</v-btn>
+                <v-form v-model="valid"> 
+                    <v-text-field v-model="Email" :rules="[rules.required, rules.email]" label="E-mail" required dark></v-text-field>
+                    <v-btn class="my-3" :disabled="!valid" @click.prevent="sendResetPWEmail" block dark>Reset password</v-btn>
                     <v-btn to="/Login" block dark>Return to login page</v-btn>
                 </v-form>
             </TransPanel>
@@ -31,7 +31,15 @@ export default {
             Email: "",
             showNPW: false,
             showCNPW: false,
-            error: null
+            error: null,
+            valid: false,
+            rules: {
+            required: value => !!value || 'Required.',
+            email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || 'Not a valid e-mail.'
+            },
+        },
         }
     },
     methods: {
@@ -61,6 +69,7 @@ export default {
     
     #resetPW_Form {
         width: 35%;
+        background: rgba(0, 0, 0, 0.65);
     }
 
     h1, h2 {
