@@ -177,7 +177,6 @@
                         dense 
                         outlined 
                         v-model="start"
-                        :rules="[rules.required]"
                         type="date" 
                         label="News start date"></v-text-field>
                         <v-text-field 
