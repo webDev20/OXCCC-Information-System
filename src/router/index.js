@@ -39,7 +39,32 @@ const routes = [
     meta: {
       requiresAuth: true
     }
-  }
+  },
+  {
+    path: '/songSuggestion',
+    name: 'songSuggestion',
+    component: () => import('../views/songSuggestion.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/songDB',
+    name: 'songDB',
+    component: () => import('../views/songDB.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/userProfile',
+    name: 'userProfile',
+    component: () => import('../views/userProfile.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  
 ]
 
 const router = new VueRouter({
