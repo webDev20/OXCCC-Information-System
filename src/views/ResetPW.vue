@@ -46,9 +46,6 @@ export default {
         sendResetPWEmail() {
             firebase.auth()
             .sendPasswordResetEmail(this.Email)
-            .then(() => {
-                console.info("Email is sent");
-            })
             .catch(err => {
                 this.error = err.message
                 console.error(this.error);

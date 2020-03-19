@@ -781,10 +781,8 @@ export default {
         this.editMode = selectedEvent.id;
         if (selectedEvent.newsDetails == null) {
           this.newsDetails = null;
-          console.log(this.newsDetails);
         } else {
           this.newsDetails = selectedEvent.newsDetails;
-          console.log(this.newsDetails);
         }
         this.name = selectedEvent.name;
         this.start = selectedEvent.start;

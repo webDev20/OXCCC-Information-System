@@ -71,11 +71,6 @@ export default {
             return db.collection('users').add({
               uid: data.user.uid,
               displayName: this.FirstName + " " + this.LastName
-            })
-            .then(() => {
-              console.log("New user registered")
-              console.info(data.user.displayName)
-              console.info(data.user.toJSON())
             });
         })
         .catch(err => {
