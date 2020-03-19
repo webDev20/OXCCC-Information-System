@@ -54,8 +54,8 @@
                     <ul id="upC_Worship_List" class="mt-10">
                         <li class="listItem" :key="event.key" v-for="event in events">
                             <div class="listContent">
-                                <p class=".subtitle-1">{{event.name}}</p>
-                                <p>Worship date: {{event.start}}</p>
+                                <p id="eventName" class="headline">{{event.name}}</p>
+                                <p id="eventDate" class="title">Worship date: {{event.start}}</p>
                             </div>
                         </li>
                     </ul>
@@ -128,6 +128,10 @@ export default {
         overflow: hidden;
     }
 
+    #eventName, #eventDate {
+        color: blue;
+    }
+
     #assignedWorship {
         box-shadow: none;
         padding: 5.5px 10px;
@@ -181,7 +185,7 @@ export default {
     }
 
     .listItem {
-        color: darkmagenta;
+        color: yellow;
         font-size: 22px;
     }
 
