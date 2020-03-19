@@ -61,7 +61,6 @@ export default {
         height: 100%;
         background: url("../assets/SystemBackground.png");
         background-size: 100%;
-        overflow: hidden;
     }
     
     #resetPW_Form {
