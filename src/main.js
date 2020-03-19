@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import 'babel-polyfill'
+import 'babel-polyfill';
 import * as firebase from "firebase";
 import 'firebase/firestore';
 import vuetify from './plugins/vuetify';
