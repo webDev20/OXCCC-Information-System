@@ -7,6 +7,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/index.html',
+    component: Login,
+    alias: '/'
+  },
+  {
     path: '/Login',
     name: 'Login',
     component: Login
