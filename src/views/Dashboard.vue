@@ -54,7 +54,7 @@
                     <ul id="upC_Worship_List" class="mt-10">
                         <li class="listItem" :key="event.key" v-for="event in events">
                             <div class="listContent">
-                                <p id="eventName" class="headline">{{event.name}}</p>
+                                <p id="eventName" class="headline">Rota title: {{event.name}}</p>
                                 <p id="eventDate" class="title">Worship date: {{event.start}}</p>
                             </div>
                         </li>
