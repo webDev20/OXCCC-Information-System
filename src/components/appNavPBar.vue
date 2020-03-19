@@ -16,7 +16,7 @@
         </template>
         <v-list flat>
           <v-list-item-group color="indigo">
-            <v-list-item>
+            <v-list-item to="/userProfile">
               <v-list-item-title class="pDown">Profile</v-list-item-title>
             </v-list-item>
             <v-list-item>
@@ -36,8 +36,8 @@
         >
             <v-tab to="/Dashboard">Dashboard</v-tab>
             <v-tab to="/Rota">Rota</v-tab>
-            <v-tab>Song suggestion</v-tab>
-            <v-tab>Song database</v-tab>
+            <v-tab to="/songSuggestion">Song suggestion</v-tab>
+            <v-tab to="/songDB">Song database</v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
