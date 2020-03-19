@@ -12,7 +12,7 @@
 export default {
     mounted() {
         let VerseScript = document.createElement('script')
-        VerseScript.setAttribute('src', 'http://www.ourmanna.com/verses/api/js/')
+        VerseScript.setAttribute('src', 'https://www.ourmanna.com/verses/api/js/')
         document.head.appendChild(VerseScript)
     }
 }
