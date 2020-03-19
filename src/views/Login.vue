@@ -10,10 +10,10 @@
           </v-row>
           <v-row class="ma-12 md-12" align-center justify-center>
             <TransPanel dynamicID="loginForm" class="ma-0">
-              <v-form>
-                <v-text-field v-model="Email" label="Email" prepend-icon="email" required dark></v-text-field>
-                <v-text-field v-model="Password" label="Password" prepend-icon="lock" :type="showPW ? 'text' : 'Password'" :append-icon="showPW ? 'visibility' : 'visibility_off'" @click:append="showPW = !showPW" required dark></v-text-field>
-                <v-btn @click.prevent="userLogin" block color="secondary" dark>Login</v-btn>
+              <v-form v-model="valid">
+                <v-text-field v-model="Email" :rules="[rules.required, rules.email]" label="Email" prepend-icon="email" required dark></v-text-field>
+                <v-text-field v-model="Password" :rules="[rules.required, rules.min]" label="Password" prepend-icon="lock" :type="showPW ? 'text' : 'Password'" :append-icon="showPW ? 'visibility' : 'visibility_off'" @click:append="showPW = !showPW" required dark></v-text-field>
+                <v-btn :disabled="!valid" @click.prevent="userLogin" block color="secondary" dark>Login</v-btn>
                 <v-container class="pa-0 pt-3 text-center" fluid>
                   <v-btn class="btn" to="/Register" outlined dark>Register</v-btn>
                   <v-btn class="btn" to="/ResetPW" outlined dark>Reset Password</v-btn>
@@ -42,7 +42,16 @@ export default {
       Email: "",
       Password: "",
       showPW: false,
-      error: null
+      error: null,
+      valid: false,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: value => value.length >= 6 || 'Password is at least 6 characters',
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'Not a valid e-mail.'
+        },
+      },
     }
   },
   methods: {
@@ -86,6 +95,7 @@ export default {
 
   #loginForm {
     width: 350px;
+    background: rgba(0, 0, 0, 0.65);
   }
 
   .btn {
