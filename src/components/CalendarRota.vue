@@ -351,7 +351,7 @@
                         autofocus 
                         dense 
                         outlined
-                        v-if="selectedevent.name != null"
+                        v-if="selectedEvent.name != null"
                         v-model="selectedEvent.name" 
                         type="text" 
                         label="Sermon title (required)"></v-text-field>
