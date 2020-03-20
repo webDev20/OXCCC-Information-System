@@ -15,7 +15,7 @@
           <v-text-field v-model="Password" label="Password" :rules="[rules.required, rules.min]" :type="showPW ? 'text' : 'Password'" :append-icon="showPW ? 'visibility' : 'visibility_off'" @click:append="showPW = !showPW" counter required dark></v-text-field>
           <v-text-field v-model="confirmPW" label="Confirm Password" :rules="[rules.required, rules.min, passwordConfirm]" :type="showCPW ? 'text' : 'Password'" :append-icon="showCPW ? 'visibility' : 'visibility_off'" @click:append="showCPW = !showCPW" counter required dark></v-text-field>
           <v-container class="pa-0 pt-3" fluid>
-            <v-btn class="btn" to="/Login" outlined dark>Login</v-btn>
+            <v-btn class="btn" to="/Login" outlined dark>Return to login page</v-btn>
             <v-btn class="btn" :disabled="!valid" @click.prevent="registerUser" outlined dark>Register</v-btn>
           </v-container>
         </v-form>
@@ -71,12 +71,9 @@ export default {
             return db.collection('users').add({
               uid: data.user.uid,
               displayName: this.FirstName + " " + this.LastName
-            })
-            .then(() => {
-              console.log("New user registered")
-              console.info(data.user.displayName)
-              console.info(data.user.toJSON())
             });
+        }).then(() => {
+          setTimeout(() => this.$router.replace('Login'), 25);
         })
         .catch(err => {
           this.error = err.message;
@@ -93,7 +90,6 @@ export default {
         height: 100%;
         background: url("../assets/SystemBackground.png");
         background-size: 100%;
-        overflow: hidden;
     }
 
     #regForm {

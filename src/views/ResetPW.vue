@@ -46,9 +46,6 @@ export default {
         sendResetPWEmail() {
             firebase.auth()
             .sendPasswordResetEmail(this.Email)
-            .then(() => {
-                console.info("Email is sent");
-            })
             .catch(err => {
                 this.error = err.message
                 console.error(this.error);
@@ -64,7 +61,6 @@ export default {
         height: 100%;
         background: url("../assets/SystemBackground.png");
         background-size: 100%;
-        overflow: hidden;
     }
     
     #resetPW_Form {

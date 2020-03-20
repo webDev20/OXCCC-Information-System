@@ -8,7 +8,7 @@
       >
       <v-toolbar-title>OXCCC Information System</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-menu open-on-hover offset-x>
+      <v-menu open-on-hover open-on-click offset-x>
         <template v-slot:activator="{ on }">
           <v-icon v-on="on">expand_more</v-icon>
           <v-icon>person</v-icon>

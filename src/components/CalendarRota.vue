@@ -164,18 +164,19 @@
                   <v-toolbar-title v-html="name"></v-toolbar-title>
                 </v-toolbar>
                     <v-container>
-                      <v-form @submit.prevent="addNews">
+                      <v-form v-model="valid" @submit.prevent="addNews">
                         <v-text-field 
                         autofocus 
                         dense 
-                        outlined 
+                        outlined
+                        :rules="[rules.required]"
                         v-model="name" 
                         type="text" 
                         label="News title (required)"></v-text-field>
                         <v-text-field 
                         dense 
                         outlined 
-                        v-model="start" 
+                        v-model="start"
                         type="date" 
                         label="News start date"></v-text-field>
                         <v-text-field 
@@ -187,12 +188,14 @@
                         <v-textarea 
                         dense 
                         outlined 
-                        auto-grow 
+                        auto-grow
+                        :rules="[rules.required]"
                         label="Enter the news information" v-model="newsDetails"></v-textarea>
                         <v-btn 
                         block 
                         :color="newsColor" 
-                        type="submit" 
+                        type="submit"
+                        :disabled="!valid" 
                         @click.stop="news = false" 
                         dark>Save news</v-btn>
                       </v-form>
@@ -348,7 +351,7 @@
                         autofocus 
                         dense 
                         outlined
-                        v-if="selectedevent.name != null"
+                        v-if="selectedEvent.name != null"
                         v-model="selectedEvent.name" 
                         type="text" 
                         label="Sermon title (required)"></v-text-field>
@@ -729,7 +732,11 @@ export default {
         users: [],
         editMode: null,
         newsColor: 'green',
-        newsDetails: null
+        newsDetails: null,
+        rules: {
+        required: value => !!value || 'Required.',
+        },
+        valid: false
       }
     },
     computed: {
@@ -781,10 +788,8 @@ export default {
         this.editMode = selectedEvent.id;
         if (selectedEvent.newsDetails == null) {
           this.newsDetails = null;
-          console.log(this.newsDetails);
         } else {
           this.newsDetails = selectedEvent.newsDetails;
-          console.log(this.newsDetails);
         }
         this.name = selectedEvent.name;
         this.start = selectedEvent.start;

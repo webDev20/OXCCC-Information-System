@@ -58,11 +58,6 @@ export default {
     userLogin() {
       firebase.auth()
       .signInWithEmailAndPassword(this.Email, this.Password)
-      .then(data => {
-        console.info("Logged in successful");
-        console.info("Username: ", data.user.displayName);
-        console.info(data.user.toJSON());
-      })
       .then(() => {
         setTimeout(() => this.$router.replace('Dashboard'), 250);
       })
@@ -81,7 +76,6 @@ export default {
     height: 100%;
     background: url("../assets/SystemBackground.png");
     background-size: 100%;
-    overflow: hidden;
   }
 
   h1 {

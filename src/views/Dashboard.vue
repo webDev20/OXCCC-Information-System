@@ -54,8 +54,8 @@
                     <ul id="upC_Worship_List" class="mt-10">
                         <li class="listItem" :key="event.key" v-for="event in events">
                             <div class="listContent">
-                                <p class=".subtitle-1">{{event.name}}</p>
-                                <p>Worship date: {{event.start}}</p>
+                                <p id="eventName" class="headline">Rota title: {{event.name}}</p>
+                                <p id="eventDate" class="title">Worship date: {{event.start}}</p>
                             </div>
                         </li>
                     </ul>
@@ -125,7 +125,10 @@ export default {
         height: 100%;
         background: url("../assets/SystemBackground.png");
         background-size: 100%;
-        overflow: hidden;
+    }
+
+    #eventName, #eventDate {
+        color: blue;
     }
 
     #assignedWorship {
@@ -181,7 +184,7 @@ export default {
     }
 
     .listItem {
-        color: darkmagenta;
+        color: yellow;
         font-size: 22px;
     }
 
